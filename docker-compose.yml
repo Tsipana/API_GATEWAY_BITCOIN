@@ -1,0 +1,31 @@
+# Specify the compose format the file conforms to
+version: "3"
+# Specify the set of services your app is composed of
+services:
+# This is the db service
+  db:
+# The image to pull from docker hub
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    hostname: sql-server
+    container_name: sql-server
+# Maps the HOST port of 1433 to the container port of 1433 (the default sql port)
+    ports:
+      - "1433:1433"
+# Set environment variables 
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password01
+  rabbitmq:
+# The image to pull from docker hub
+    image: "rabbitmq:3-management"
+# Maps ports HOST:Container where 5672 is the port your apps will eb connecting to rabbit
+# 15672 is the port for the management portal enter localhost:15672 in your browser
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+# Create a volume for rabbit to persist its data to
+    volumes:
+      - "rabbitmq_data:/data"
+#specifies the volumes to create as part of your app
+volumes:
+  rabbitmq_data:
